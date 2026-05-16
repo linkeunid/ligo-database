@@ -29,13 +29,13 @@ case "$BUMP" in
 esac
 
 VERSION="v${MAJOR}.${MINOR}.${PATCH}"
-echo "Releasing ligo-boilerplate: $LATEST → $VERSION"
+echo "Releasing ligo-database: $LATEST → $VERSION"
 
 BRANCH="$(git -C "$DIR" branch --show-current)"
 git -C "$DIR" tag -a "$VERSION" -m "$VERSION"
 git -C "$DIR" push origin "$BRANCH"
 git -C "$DIR" push origin "$VERSION"
 
-gh release create "$VERSION" --repo linkeunid/ligo-boilerplate --title "$VERSION" --notes "" --latest
+gh release create "$VERSION" --repo linkeunid/ligo-database --title "$VERSION" --notes "" --latest
 
-echo "Released ligo-boilerplate $VERSION"
+echo "Released ligo-database $VERSION"
