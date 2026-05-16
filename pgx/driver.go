@@ -23,10 +23,13 @@ type Config struct {
 	HealthCheckPeriod time.Duration
 }
 
+// connectTimeout bounds the pre-flight ping so a wrong host doesn't hang.
+const connectTimeout = 5 * time.Second
+
 func newPool(cfg Config) (*pgxpool.Pool, error) {
 	poolCfg, err := pgxpool.ParseConfig(cfg.DSN)
 	if err != nil {
-		return nil, fmt.Errorf("database/pgx: parse config: %w", err)
+		return nil, fmt.Errorf("database/pgx: invalid DSN (check scheme, host, port, user, password, dbname, sslmode): %w", err)
 	}
 	if cfg.MaxConns > 0 {
 		poolCfg.MaxConns = cfg.MaxConns
@@ -48,7 +51,33 @@ func newPool(cfg Config) (*pgxpool.Pool, error) {
 	if err != nil {
 		return nil, fmt.Errorf("database/pgx: create pool: %w", err)
 	}
+
+	// Pre-flight ping: surface auth / connectivity errors at construction
+	// time with a clear message, instead of being swallowed by a lifecycle
+	// hook later as a generic "hook execution failed".
+	pingCtx, cancel := context.WithTimeout(context.Background(), connectTimeout)
+	defer cancel()
+	if err := pool.Ping(pingCtx); err != nil {
+		pool.Close()
+		return nil, fmt.Errorf(
+			"database/pgx: cannot connect to %s (check credentials, host/port, and that the database exists): %w",
+			redactDSN(poolCfg.ConnConfig), err,
+		)
+	}
 	return pool, nil
+}
+
+// redactDSN renders a safe, log-friendly form of the connection target with
+// the password masked.
+func redactDSN(c *pgx.ConnConfig) string {
+	if c == nil {
+		return "<unknown>"
+	}
+	db := c.Database
+	if db == "" {
+		db = "?"
+	}
+	return fmt.Sprintf("postgres://%s:***@%s:%d/%s", c.User, c.Host, c.Port, db)
 }
 
 // --- Module constructors ---
