@@ -16,7 +16,7 @@ if ! git -C "$DIR" diff --quiet || ! git -C "$DIR" diff --cached --quiet; then
   exit 1
 fi
 
-LATEST="$(git -C "$DIR" tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)"
+LATEST="$(git -C "$DIR" tag --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1 || true)"
 LATEST="${LATEST:-v0.0.0}"
 
 IFS='.' read -r MAJOR MINOR PATCH <<< "${LATEST#v}"
