@@ -4,7 +4,7 @@ go 1.25.10
 
 require (
 	github.com/jackc/pgx/v5 v5.9.2
-	github.com/linkeunid/ligo v0.10.0
+	github.com/linkeunid/ligo v0.11.0
 	github.com/stretchr/testify v1.11.1
 )
 
