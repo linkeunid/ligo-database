@@ -15,10 +15,11 @@ type mockDB struct {
 func (m *mockDB) Exec(context.Context, string, ...any) (Result, error) { return nil, nil }
 func (m *mockDB) Query(context.Context, string, ...any) (Rows, error)  { return nil, nil }
 func (m *mockDB) QueryRow(context.Context, string, ...any) Row         { return nil }
-func (m *mockDB) Ping(context.Context) error                            { m.pinged = true; return nil }
-func (m *mockDB) Close() error                                          { m.closed = true; return nil }
-func (m *mockDB) Begin(context.Context) (Tx, error)                     { return nil, nil }
-func (m *mockDB) Unwrap() any                                           { return nil }
+func (m *mockDB) Ping(context.Context) error { m.pinged = true; return nil }
+
+func (m *mockDB) Close() error                      { m.closed = true; return nil }
+func (m *mockDB) Begin(context.Context) (Tx, error) { return nil, nil }
+func (m *mockDB) Unwrap() any                       { return nil }
 
 func TestModuleName(t *testing.T) {
 	m := Module(&mockDB{})

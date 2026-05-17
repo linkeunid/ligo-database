@@ -31,10 +31,12 @@ func newModule(name string, db DB, regFunc func(*DBRegistry)) ligo.Module {
 	reg := getRegistry()
 	regFunc(reg)
 
-	return ligo.NewModule(name,
+	return ligo.NewModule(
+		name,
 		ligo.Providers(
 			ligo.Export(
-				ligo.Value(db,
+				ligo.Value(
+					db,
 					ligo.WithHooks(
 						ligo.OnInit(func() error {
 							return db.Ping(context.Background())

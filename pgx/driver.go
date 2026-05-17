@@ -8,8 +8,9 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
-	database "github.com/linkeunid/ligo-database"
+
 	"github.com/linkeunid/ligo"
+	database "github.com/linkeunid/ligo-database"
 )
 
 // --- Config ---
@@ -180,10 +181,10 @@ type rowsAdapter struct {
 	rows pgx.Rows
 }
 
-func (r *rowsAdapter) Next() bool            { return r.rows.Next() }
+func (r *rowsAdapter) Next() bool             { return r.rows.Next() }
 func (r *rowsAdapter) Scan(dest ...any) error { return r.rows.Scan(dest...) }
-func (r *rowsAdapter) Close()                { r.rows.Close() }
-func (r *rowsAdapter) Err() error            { return r.rows.Err() }
+func (r *rowsAdapter) Close()                 { r.rows.Close() }
+func (r *rowsAdapter) Err() error             { return r.rows.Err() }
 
 type rowAdapter struct {
 	row pgx.Row

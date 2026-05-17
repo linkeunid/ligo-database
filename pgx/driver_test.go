@@ -4,8 +4,9 @@ import (
 	"testing"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	database "github.com/linkeunid/ligo-database"
 	"github.com/stretchr/testify/assert"
+
+	database "github.com/linkeunid/ligo-database"
 )
 
 func TestPoolWrapper_ImplementsDB(t *testing.T) {
