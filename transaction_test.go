@@ -16,7 +16,7 @@ type mockTx struct {
 func (t *mockTx) Exec(context.Context, string, ...any) (Result, error) { return nil, nil }
 func (t *mockTx) Query(context.Context, string, ...any) (Rows, error)  { return nil, nil }
 func (t *mockTx) QueryRow(context.Context, string, ...any) Row         { return nil }
-func (t *mockTx) Commit(context.Context) error { t.committed = true; return nil }
+func (t *mockTx) Commit(context.Context) error                         { t.committed = true; return nil }
 
 func (t *mockTx) Rollback(context.Context) error { t.rolledBack = true; return nil }
 

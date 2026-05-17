@@ -42,8 +42,7 @@ func newModule(name string, db DB, regFunc func(*DBRegistry)) ligo.Module {
 							return db.Ping(context.Background())
 						}),
 						ligo.OnDestroy(func() error {
-							db.Close()
-							return nil
+							return db.Close()
 						}),
 					),
 				),
